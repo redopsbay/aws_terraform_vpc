@@ -2,35 +2,35 @@
 /* Vars Here! */
 
 variable "region" {
-  type = string
+  type        = string
   description = "Prepared AWS Region."
 }
 
 variable "environment" {
-  type = string
+  type        = string
   description = "i.e, dev, staging, prod."
-  default = "dev"
+  default     = "dev"
 }
 
 variable "privatekey_name" {
-  type = string
+  type        = string
   description = "AWS SSH Key Pair."
-  default = "ops"
+  default     = "ops"
 }
 
 variable "vpc_cidr" {
-  type = string
+  type        = string
   description = "CIDR of my VPC."
 }
 
 variable "public_subnets" {
-  type = list(string)
+  type        = list(string)
   default     = []
   description = "Public Subnets To Populate."
 }
 
 variable "private_subnets" {
-  type = list(string)
+  type        = list(string)
   default     = []
   description = "List Of Private Subnets."
 }
@@ -39,7 +39,7 @@ variable "ami" {
   type = map(string)
   default = {
     "ap-southeast-1" = "ami-0fed77069cd5a6d6c"
-    "ap-south-1" = "ami-0567e0d2b4b2169ae"
+    "ap-south-1"     = "ami-0567e0d2b4b2169ae"
     "ap-southeast-2" = "ami-02389157cb8d3e3b5"
   }
 
@@ -47,13 +47,13 @@ variable "ami" {
 }
 
 variable "instance_type" {
-  type = string
+  type        = string
   default     = "t2.micro"
   description = "Prepared Instance Type."
 }
 
 variable "bastion_instance_type" {
-  type = string
+  type        = string
   default     = "t2.micro"
   description = "Bastion host instance type."
 }
@@ -62,7 +62,7 @@ variable "bastion_ami" {
   type = map(string)
   default = {
     "ap-southeast-1" = "ami-0fed77069cd5a6d6c"
-    "ap-south-1" = "ami-0567e0d2b4b2169ae"
+    "ap-south-1"     = "ami-0567e0d2b4b2169ae"
     "ap-southeast-2" = "ami-02389157cb8d3e3b5"
   }
 
@@ -70,19 +70,19 @@ variable "bastion_ami" {
 }
 
 variable "enable_dns_hostnames" {
-  type = bool
+  type        = bool
   description = "True, If private DNS should be enabled on VPC"
   default     = true
 }
 
 variable "enable_dns_support" {
-  type = bool
+  type        = bool
   description = "True, If private DNS should be enabled on VPC"
   default     = true
 }
 
 variable "map_public_ip_on_launch" {
-  type = bool
+  type        = bool
   description = "False, When Public IP Should not be assigned automatically."
   default     = true
 }
