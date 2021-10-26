@@ -18,7 +18,7 @@ module "vpc" {
 }
 ```
 
-Check [interfaces.tf](https://github.com/redopsbay/aws_terraform_vpc/interfaces.tf) to manipulate declared variables.
+Check [interfaces.tf](https://github.com/redopsbay/aws_terraform_vpc/blob/master/interface.tf) to manipulate declared variables.
 
 
 
