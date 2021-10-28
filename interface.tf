@@ -4,6 +4,7 @@
 variable "region" {
   type        = string
   description = "Prepared AWS Region."
+  default     = "ap-southeast-1"
 }
 
 variable "environment" {
