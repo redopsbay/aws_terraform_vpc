@@ -43,7 +43,7 @@ resource "aws_route" "private_nat_gateway" {
   count                  = length(var.private_subnets)
   route_table_id         = aws_route_table.private[count.index].id
   destination_cidr_block = "0.0.0.0/0"
-  nat_gateway_id         = aws_nat_gateway.environment[count.index].id
+  
 }
 
 resource "aws_subnet" "public" {
@@ -82,12 +82,6 @@ resource "aws_route_table_association" "public" {
   route_table_id = aws_route_table.public.id
 }
 
-resource "aws_nat_gateway" "environment" {
-  count = length(var.public_subnets)
-
-  allocation_id = aws_eip.environment[count.index].id
-  subnet_id     = aws_subnet.public[count.index].id
-}
 
 resource "aws_security_group" "bastion" {
   vpc_id      = aws_vpc.environment.id
