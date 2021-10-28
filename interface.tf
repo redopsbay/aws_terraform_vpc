@@ -9,14 +9,8 @@ variable "region" {
 
 variable "environment" {
   type        = string
-  description = "i.e, dev, staging, prod."
+  description = "i.e, dev, prod."
   default     = "dev"
-}
-
-variable "privatekey_name" {
-  type        = string
-  description = "AWS SSH Key Pair."
-  default     = "ops"
 }
 
 variable "vpc_cidr" {
@@ -34,40 +28,6 @@ variable "private_subnets" {
   type        = list(string)
   default     = []
   description = "List Of Private Subnets."
-}
-
-variable "ami" {
-  type = map(string)
-  default = {
-    "ap-southeast-1" = "ami-0fed77069cd5a6d6c"
-    "ap-south-1"     = "ami-0567e0d2b4b2169ae"
-    "ap-southeast-2" = "ami-02389157cb8d3e3b5"
-  }
-
-  description = "AMIs for Nearest PH Regions."
-}
-
-variable "instance_type" {
-  type        = string
-  default     = "t2.micro"
-  description = "Prepared Instance Type."
-}
-
-variable "bastion_instance_type" {
-  type        = string
-  default     = "t2.micro"
-  description = "Bastion host instance type."
-}
-
-variable "bastion_ami" {
-  type = map(string)
-  default = {
-    "ap-southeast-1" = "ami-0fed77069cd5a6d6c"
-    "ap-south-1"     = "ami-0567e0d2b4b2169ae"
-    "ap-southeast-2" = "ami-02389157cb8d3e3b5"
-  }
-
-  description = "The bastion host AMIs."
 }
 
 variable "enable_dns_hostnames" {
@@ -96,14 +56,6 @@ output "vpc_id" {
 
 output "vpc_cidr" {
   value = aws_vpc.environment.cidr_block
-}
-
-output "bastion_host_dns" {
-  value = aws_instance.bastion.public_dns
-}
-
-output "bastion_host_ip" {
-  value = aws_instance.bastion.public_ip
 }
 
 output "public_subnet_ids" {

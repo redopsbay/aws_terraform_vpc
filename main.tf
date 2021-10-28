@@ -82,12 +82,6 @@ resource "aws_route_table_association" "public" {
   route_table_id = aws_route_table.public.id
 }
 
-resource "aws_eip" "environment" {
-  count = length(var.public_subnets)
-
-  vpc = true
-}
-
 resource "aws_nat_gateway" "environment" {
   count = length(var.public_subnets)
 
@@ -125,18 +119,3 @@ resource "aws_security_group" "bastion" {
     Name = "${var.environment}-bastion-sg"
   }
 }
-
-resource "aws_instance" "bastion" {
-  ami                         = var.bastion_ami[var.region]
-  instance_type               = var.bastion_instance_type
-  key_name                    = var.privatekey_name
-  monitoring                  = true
-  vpc_security_group_ids      = [aws_security_group.bastion.id]
-  subnet_id                   = aws_subnet.public[0].id
-  associate_public_ip_address = true
-
-  tags = {
-    Name = "${var.environment}-bastion"
-  }
-}
-
