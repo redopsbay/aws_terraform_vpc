@@ -19,20 +19,20 @@ terraform {
 }
 
 provider "aws" {
-  region = "${var.default_region}"
+  region     = "ap-southeast-1"
 }
 
 module "vpc" {
-  source = "github.com/redopsbay/aws_terraform_vpc"
-
-  environment     = "dev"
+  source      = "github.com/redopsbay/aws_terraform_vpc"
+  environment = "dev"
   private_subnets = ["10.10.10.0/24"]
   public_subnets  = ["10.10.20.0/24"]
   vpc_cidr        = "10.10.0.0/16"
+
 }
 
 resource "aws_security_group" "web_application" {
-  vpc_id      = module.vpc.aws_vpc.vpc_id
+  vpc_id      = module.vpc.vpc_id 
   name        = "${var.environment}-webapp1-asia"
   description = "Allow SSH from bastion host and web app access to public"
 
@@ -40,20 +40,20 @@ resource "aws_security_group" "web_application" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["${module.vpc.vpc_cidr}"]
+    cidr_blocks = ["${module.vpc.vpc_cidr}", "your-ipv4-address/24"]
   }
 
   ingress {
     from_port   = 80
     to_port     = 80
-    protocol    = "http"
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
   ingress {
     from_port   = 443
     to_port     = 443
-    protocol    = "https"
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
@@ -69,69 +69,24 @@ resource "aws_security_group" "web_application" {
   }
 }
 
-resource "aws_security_group" "bastion" {
-  vpc_id      = module.vpc.vpc_id
-  name        = "${var.environment}-bastion-host"
-  description = "Allow SSH to bastion host"
-
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    from_port   = 8
-    to_port     = 0
-    protocol    = "icmp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    Name = "${var.environment}-bastion-sg"
-  }
+data "aws_region" "current" {
+  name = "ap-southeast-1"
 }
-
-resource "aws_instance" "bastion" {
-  ami                         = "ap-southeast-1"
-  instance_type               = "t2.micro""
-  key_name                    = var.privatekey_name
-  monitoring                  = true
-  vpc_security_group_ids      = [aws_security_group.bastion.id]
-  subnet_id                   = aws_subnet.public[0].id
-  associate_public_ip_address = true
-  tags = {
-    Name = "${var.environment}-bastion"
-  }
-}
-
-
 
 resource "aws_instance" "webapp-1" {
-  ami                         = "ap-southeast-1"
+  ami                         = "ami-0fed77069cd5a6d6c"
   instance_type               = "t2.micro"
   key_name                    = var.privatekey_name
   vpc_security_group_ids      = ["${aws_security_group.web_application.id}"]
-  subnet_id                   = aws_subnet.public[0].id
+  subnet_id                   = element(module.vpc.public_subnet_ids, 1)
   associate_public_ip_address = true
-
   tags = {
     Name = "${var.environment}-webapp-asia"
   }
 
   /* Valid values: prod, dev, staging */
-
-  count = "${var.environment == "prod" ? 4 : 2}"
+  count = var.environment == "prod" ? 4 : 2
 }
-
 ```
 
 ## Variables

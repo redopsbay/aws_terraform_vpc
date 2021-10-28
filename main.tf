@@ -39,13 +39,6 @@ resource "aws_route" "public_internet_gateway" {
   gateway_id             = aws_internet_gateway.environment.id
 }
 
-resource "aws_route" "private_nat_gateway" {
-  count                  = length(var.private_subnets)
-  route_table_id         = aws_route_table.private[count.index].id
-  destination_cidr_block = "0.0.0.0/0"
-  
-}
-
 resource "aws_subnet" "public" {
   vpc_id                  = aws_vpc.environment.id
   cidr_block              = var.public_subnets[count.index]
