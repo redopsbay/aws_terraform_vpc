@@ -48,7 +48,7 @@ variable "map_public_ip_on_launch" {
   default     = true
 }
 
-/* Outputs Here! */
+/* API Outputs Here! */
 
 output "vpc_id" {
   value = aws_vpc.environment.id

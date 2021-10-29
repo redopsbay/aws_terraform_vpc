@@ -28,6 +28,8 @@ module "vpc" {
   private_subnets = ["10.10.10.0/24"]
   public_subnets  = ["10.10.20.0/24"]
   vpc_cidr        = "10.10.0.0/16"
+  enable_dns_support = true
+  enable_dns_hostnames = true
 
 }
 
